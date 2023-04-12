@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
+import java.util.HashSet;
 import java.util.Set;
 import edu.sumdu.blogwebapp.enums.Role;
 
@@ -17,11 +18,17 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @NotBlank(message = "Username cannot be empty")
+    @Column(unique = true)
     private String username;
+
+    private String firstName;
+
+    private String lastName;
+
     @NotBlank(message = "Password cannot be empty")
     private String password;
     @Transient
-    @NotBlank(message = "Password confirmation cannot be empty")
+    //@NotBlank(message = "Password confirmation cannot be empty")
     private String password2;
     private boolean active;
 
@@ -35,9 +42,17 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<PendingUserChanges> pendingUserChanges;
+
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
+
+    public User() {
+    }
+
 
     public Long getId() {
         return id;
@@ -126,5 +141,29 @@ public class User implements UserDetails {
 
     public void setPassword2(String password2) {
         this.password2 = password2;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public Set<PendingUserChanges> getPendingUserChanges() {
+        return pendingUserChanges;
+    }
+
+    public void setPendingUserChanges(Set<PendingUserChanges> pendingUserChanges) {
+        this.pendingUserChanges = pendingUserChanges;
     }
 }

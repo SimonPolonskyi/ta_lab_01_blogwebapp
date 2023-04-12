@@ -32,7 +32,7 @@ public class WebSecurityConfig {
 
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/registration", "/static/**", "/activate/*", "/img/**", "/message/*").permitAll()
+                        .requestMatchers("/", "/registration", "/static/**", "/activate/*", "/img/**", "/message/*", "/changeconfirm/*","/resetpass").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationManager(authenticationManager)
@@ -44,19 +44,6 @@ public class WebSecurityConfig {
 
         return http.build();
     }
-  /*
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("u")
-                        .password("2")
-                        .roles("USER")
-                        .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
-    */
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {

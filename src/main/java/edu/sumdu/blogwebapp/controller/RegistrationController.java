@@ -27,12 +27,23 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
 
+        boolean paramsHasEror = false;
+
+
+        if (user.getPassword2()== null ) {
+            model.addAttribute("password2Error", "Password confirmation cannot be empty");
+            paramsHasEror=true;
+            // return "registration";
+        }
+
+
         if (user.getPassword() != null && !user.getPassword().equals(user.getPassword2())) {
             model.addAttribute("passwordError", "Passwords are different!");
+            paramsHasEror=true;
            // return "registration";
         }
 
-        if (bindingResult.hasErrors()) {
+        if (paramsHasEror || bindingResult.hasErrors()) {
             Map<String, String> errors = ControllerUtils.getErrors(bindingResult);
 
             model.mergeAttributes(errors);
@@ -53,11 +64,15 @@ public class RegistrationController {
         boolean isActivated = userSevice.activateUser(code);
 
         if (isActivated) {
+            model.addAttribute("messageType", "success");
             model.addAttribute("message", "User successfully activated");
         } else {
+            model.addAttribute("messageType", "danger");
             model.addAttribute("message", "Activation code is not found!");
         }
 
         return "login";
     }
+
+
 }

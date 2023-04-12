@@ -3,12 +3,16 @@ package edu.sumdu.blogwebapp.controller;
 import edu.sumdu.blogwebapp.entity.User;
 import edu.sumdu.blogwebapp.enums.Role;
 import edu.sumdu.blogwebapp.service.UserSevice;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.Map;
 
@@ -16,12 +20,14 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserSevice userSevice;
+    private UserSevice userService;
+
+
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public String userList(Model model) {
-        model.addAttribute("users", userSevice.findAll());
+        model.addAttribute("users", userService.findAll());
 
         return "userList";
     }
@@ -42,27 +48,58 @@ public class UserController {
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user
     ) {
-       userSevice.saveUser(user, username, form);
+       userService.saveUser(user, username, form);
 
         return "redirect:/user";
     }
 
     @GetMapping("profile")
-    public String getProfile(Model model, @AuthenticationPrincipal User user) {
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("email", user.getEmail());
-
+    public String getProfile(@AuthenticationPrincipal UserDetails currentUserDetails, Model model) {
+        User currentUser = userService.findByUsername(currentUserDetails.getUsername());
+        model.addAttribute("user", currentUser);
         return "profile";
     }
 
     @PostMapping("profile")
-    public String updateProfile(
-            @AuthenticationPrincipal User user,
-            @RequestParam String password,
-            @RequestParam String email
+    public String updateProfile(@AuthenticationPrincipal UserDetails currentUserDetails,
+                                @Valid User updatedUser,
+                                BindingResult result,
+                                Model model,
+                                @RequestParam String password,
+                                @RequestParam String password2,
+                                @RequestParam String email,
+                                @RequestParam String firstName,
+                                @RequestParam String lastName
     ) {
-        userSevice.updateProfile(user, password, email);
+        User currentUser = userService.findByUsername(currentUserDetails.getUsername());
 
-        return "redirect:/user/profile";
+        boolean paramsHasEror = false;
+
+        if (password!= null && password2== null ) {
+
+            model.addAttribute("password2Error", "Password confirmation cannot be empty");
+            paramsHasEror=true;
+        }
+
+
+        if (password!= null &&  !password.equals(password2)) {
+            model.addAttribute("password2Error", "Passwords are different!");
+            paramsHasEror=true;
+        }
+
+        if (email== null) {
+            model.addAttribute("emailError", "Email cannot be empty");
+            paramsHasEror=true;
+        }
+
+        if (paramsHasEror ) {
+            return "profile";
+        }
+
+        userService.updateProfile(currentUser, password, email, firstName, lastName);
+
+        return "profile";
     }
+
+
 }

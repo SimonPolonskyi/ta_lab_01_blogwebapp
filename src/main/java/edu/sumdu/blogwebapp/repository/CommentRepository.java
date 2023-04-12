@@ -5,7 +5,7 @@ import edu.sumdu.blogwebapp.entity.Message;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
-import edu.sumdu.blogwebapp.entity.Comment;
+
 
 import java.util.List;
 

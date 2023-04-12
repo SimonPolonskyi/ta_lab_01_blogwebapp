@@ -1,7 +1,5 @@
 <#import "parts/common.ftl" as c>
 
-
 <@c.page>
-    <#include "parts/msgcard.ftl">
-
+    <h3>Sorry. Something went wrong! </h3>
 </@c.page>

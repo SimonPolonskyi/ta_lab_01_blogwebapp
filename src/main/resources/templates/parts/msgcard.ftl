@@ -1,4 +1,3 @@
-<#macro mcard>
     <div class="card-columns mb=5">
         <#list messages as message>
             <div class="card my-3">
@@ -21,4 +20,3 @@
             No message
         </#list>
     </div>
-</#macro>

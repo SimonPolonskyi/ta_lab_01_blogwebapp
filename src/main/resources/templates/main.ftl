@@ -1,5 +1,4 @@
 <#import "parts/common.ftl" as c>
-<#import "parts/msgcard.ftl" as m>
 
 <@c.page>
     <div class="mb-5">
@@ -54,6 +53,7 @@
         </div>
     </div>
 
-    <@m.mcard></@m.mcard>
+    <#include "parts/msgcard.ftl">
+
 
 </@c.page>
