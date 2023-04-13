@@ -110,6 +110,20 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- JAXB -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+
+			<scope>runtime</scope>
+		</dependency>
+
+
 	</dependencies>
 
 
