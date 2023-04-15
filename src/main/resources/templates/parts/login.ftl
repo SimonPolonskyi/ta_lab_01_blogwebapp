@@ -24,11 +24,11 @@
                             </div>
                             <#if isRegisterForm>
                                 <div class="mb-3">
-                                    <label for="firstName" class="form-label">User Name</label>
+                                    <label for="firstName" class="form-label">First Name</label>
                                     <input type="text" id="firstName"  name="firstName" class="form-control"  value="<#if user??>${user.firstName}</#if>" />
                                 </div>
                                 <div class="mb-3">
-                                    <label for="lastName" class="form-label">User Name</label>
+                                    <label for="lastName" class="form-label">Last Name</label>
                                     <input type="text" id="lastName"  name="lastName" class="form-control"  value="<#if user??>${user.lastName}</#if>" />
                                 </div>
                             </#if>

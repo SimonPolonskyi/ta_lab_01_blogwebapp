@@ -13,6 +13,7 @@ public  class ServerInfo {
     private int port;
     private String hostname;
 
+    private String prodhost;
 
     /*@Value("${hostname}")
     private String hostname;
@@ -21,11 +22,14 @@ public  class ServerInfo {
     private  Integer  port;
 */
     public  String getHost(){
-
-        if (port!=0){
-            return  hostname+":"+port;
+        if (prodhost==null || prodhost.isEmpty()) {
+            if (port!=0){
+                return  hostname+":"+port;
+            }else{
+                return  hostname;
+            }
         }else{
-            return  hostname;
+            return prodhost;
         }
     }
 
@@ -43,5 +47,13 @@ public  class ServerInfo {
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
+    }
+
+    public String getProdhost() {
+        return prodhost;
+    }
+
+    public void setProdhost(String prodhost) {
+        this.prodhost = prodhost;
     }
 }

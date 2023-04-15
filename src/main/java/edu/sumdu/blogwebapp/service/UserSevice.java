@@ -116,7 +116,7 @@ public class UserSevice implements UserDetailsService {
                     if (pendingUserChange.isPresent()){
                          message = String.format(
                                 "Hello, %s! \n" +
-                                        "You new password: \n%s\n To confirm this change following the link: http://%s/changeconfirm/%s",
+                                        "You new password: \n%s\nTo confirm this change following the link: http://%s/changeconfirm/%s",
                                 user.getUsername(),
                                 newPassword,
                                 serverInfo.getHost(),
@@ -130,10 +130,12 @@ public class UserSevice implements UserDetailsService {
 
 
 
-                    System.out.println("----------------------------------------------------------------------------------------");
+               /*     System.out.println("----------------------------------------------------------------------------------------");
                     System.out.println(message);
                     System.out.println("----------------------------------------------------------------------------------------");
+                */
                     // mailSender.send(user.getEmail(), "Activation code", message);
+
                 }
                 break;
 
@@ -158,9 +160,10 @@ public class UserSevice implements UserDetailsService {
                     }
 
 
-                    System.out.println("----------------------------------------------------------------------------------------");
+               /*     System.out.println("----------------------------------------------------------------------------------------");
                     System.out.println(message);
                     System.out.println("----------------------------------------------------------------------------------------");
+                */
                     mailSender.send(user.getEmail(), "Activation code", message);
                 }
                 break;
