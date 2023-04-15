@@ -134,7 +134,7 @@ public class UserSevice implements UserDetailsService {
                     System.out.println(message);
                     System.out.println("----------------------------------------------------------------------------------------");
                 */
-                    // mailSender.send(user.getEmail(), "Activation code", message);
+                     mailSender.send(user.getEmail(), "Reset password", message);
 
                 }
                 break;
@@ -164,7 +164,7 @@ public class UserSevice implements UserDetailsService {
                     System.out.println(message);
                     System.out.println("----------------------------------------------------------------------------------------");
                 */
-                    mailSender.send(user.getEmail(), "Activation code", message);
+                    mailSender.send(user.getEmail(), "Change email", message);
                 }
                 break;
             default:
