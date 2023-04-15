@@ -35,6 +35,9 @@ create table usr (
                      primary key (id)
 );
 
+create sequence usr_seq start with 1 increment by 50;
+
+
 alter table if exists message
     add constraint message_user_fk
     foreign key (user_id) references usr;
