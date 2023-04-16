@@ -12,21 +12,20 @@ Leave comments: users can comment on posts, and the comments will be displayed o
 View posts and comments: users can view posts and their associated comments.
 
 ## Prerequisites
-Before running the application, you must have the following installed:
-
-Java 17+
-Maven 3.6 or later
-PostgreSQL
-Docker
+Before running the application, you must have the following installed:<br />
+&nbsp;&nbsp;&nbsp;Java 17+<br />
+&nbsp;&nbsp;&nbsp;Maven 3.6 or later<br />
+&nbsp;&nbsp;&nbsp;PostgreSQL<br />
+&nbsp;&nbsp;&nbsp;Docker
 ## Technology
 
-The application uses the following technologies:
-Java 
-Spring Boot 3
-Freemarker
-Bootstrap 5
-PostgreSQL
-Docker
+The application uses the following technologies:<br />
+&nbsp;&nbsp;&nbsp;Java<br />
+&nbsp;&nbsp;&nbsp;Spring Boot 3<br />
+&nbsp;&nbsp;&nbsp;Freemarker<br />
+&nbsp;&nbsp;&nbsp;Bootstrap 5<br />
+&nbsp;&nbsp;&nbsp;PostgreSQL<br />
+&nbsp;&nbsp;&nbsp;Docker
 
 ## Installation and run
 
