@@ -7,12 +7,10 @@ DB_USER=tablog
 DB_USER_PASS=FKLdfskwe9622
 
 #var for docker file
-POSTFIX_HOSTNAME=talab.test.net
-DB_URL=jdbc:postgresql://localhost:5432/tablogdb
-DB_USER_NAME=tablog
-DB_PASS=FKLdfskwe9622
-NOTIFICATION_FROM=testapp@talab.test.net
 PROD_HOSTNAME=talab.test.net
+POSTFIX_HOSTNAME=${POSTFIX_HOSTNAME}
+NOTIFICATION_FROM=testapp@talab.test.net
+
 
 #docker image name and docker container name
 IMAGE_NAME=my-ta-blogwebapp-app
@@ -25,15 +23,15 @@ sed -i "s|DB_USER_PASS=.*|DB_USER_PASS=$DB_USER_PASS|g" entrypoint.sh
 
 #configuration for Dockerfile
 sed -i "s|POSTFIX_HOSTNAME=.*|POSTFIX_HOSTNAME=$POSTFIX_HOSTNAME|g" Dockerfile
-sed -i "s|DB_URL=.*|DB_URL=$DB_URL|g" Dockerfile
-sed -i "s|DB_USER_NAME=.*|DB_USER_NAME=$DB_USER_NAME|g" Dockerfile
-sed -i "s|DB_PASS=.*|DB_PASS=$DB_PASS|g" Dockerfile
+sed -i "s|DB_URL=.*|DB_URL=jdbc:postgresql://localhost:5432/$DB_NAME|g" Dockerfile
+sed -i "s|DB_USER_NAME=.*|DB_USER_NAME=$DB_USER|g" Dockerfile
+sed -i "s|DB_PASS=.*|DB_PASS=$DB_USER_PASS|g" Dockerfile
 sed -i "s|NOTIFICATION_FROM=.*|NOTIFICATION_FROM=$NOTIFICATION_FROM|g" Dockerfile
 sed -i "s|PROD_HOSTNAME=.*|PROD_HOSTNAME=$PROD_HOSTNAME|g" Dockerfile
-sed -i "s|EXPOSE= *\d*|EXPOSE=$LISTEN_PORT|g" Dockerfile
+sed -i "s|EXPOSE *\([0-9]\)*|EXPOSE $LISTEN_PORT|g" Dockerfile
 
 #configuration for springboot_nginx.conf
-sed -i "s|listen= *\d*;|listen $LISTEN_PORT;|g" springboot_nginx.conf
+sed -i "s| *listen *\([0-9]\)*;|listen $LISTEN_PORT;|g" springboot_nginx.conf
 
 #Directory preparation
 data_dir=$(pwd)/data/
