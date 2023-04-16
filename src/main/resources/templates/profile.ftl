@@ -42,7 +42,7 @@
         <div class="form-group row mb-2">
             <label class="col-sm-2 col-form-label">Email:</label>
             <div class="col-sm-6">
-                <input type="email" id="email"  name="email" value="<#if user??>${user.email}<#else>${email!''}</#if>"
+                <input type="email" id="email"  name="email" value="<#if user??>${user.email!''}<#else>${email!''}</#if>"
                        class="form-control ${(emailError??)?string('is-invalid', '')}"
                        placeholder="some@some.com" />
                 <#if emailError??>
