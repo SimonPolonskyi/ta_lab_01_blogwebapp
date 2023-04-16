@@ -8,7 +8,7 @@ DB_USER_PASS=FKLdfskwe9622
 
 #var for docker file
 PROD_HOSTNAME=talab.test.net
-POSTFIX_HOSTNAME=${POSTFIX_HOSTNAME}
+POSTFIX_HOSTNAME=${PROD_HOSTNAME}
 NOTIFICATION_FROM=testapp@talab.test.net
 
 
@@ -58,7 +58,7 @@ docker build -t $IMAGE_NAME .
 
 #Start container
 echo -e "\nStart Docker container of the image ${IMAGE_NAME} with name ${CONTAINER_NAME} \n"
-docker run -d --name $CONTAINER_NAME -p LISTEN_PORT:LISTEN_PORT -v postgres-data:/var/lib/postgresql -v ${data_dir}:/opt/tablogapp/data  $IMAGE_NAME
+docker run -d --name $CONTAINER_NAME -p $LISTEN_PORT:$LISTEN_PORT -v postgres-data:/var/lib/postgresql -v ${data_dir}:/opt/tablogapp/data  $IMAGE_NAME
 
 
 
