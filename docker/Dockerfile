@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Update the package list and install necessary packages
 RUN apt-get update && \
-    apt-get install -y postfix mailutils postgresql postgresql-contrib git maven openjdk-17-jdk openjdk-17-jre nginx wget sudo
+    apt-get install -y postfix mailutils postgresql postgresql-contrib git maven openjdk-17-jdk openjdk-17-jre nginx wget sudo dos2unix
 
 #Fix for maven and Java17
 WORKDIR /tmp
@@ -20,7 +20,7 @@ RUN cp -r /tmp/apache-maven-3.9.1/* /usr/share/maven
 
 
 # Set up Postfix
-ARG POSTFIX_HOSTNAME=
+ARG POSTFIX_HOSTNAME=talab.test.net
 RUN sed -i "s/myhostname.*=.*/myhostname = $POSTFIX_HOSTNAME/g" /etc/postfix/main.cf && \
     sed -i 's/inet_interfaces.*=.*/inet_interfaces = loopback-only/g' /etc/postfix/main.cf && \
     sed -i 's/mydestination.*/mydestination = localhost.$mydomain, localhost, $myhostname/g' /etc/postfix/main.cf
@@ -34,11 +34,11 @@ WORKDIR /opt/tablogapp
 RUN mkdir data
 
 # Update the application.properties file for the PostgreSQL connection
-ARG DB_URL=
-ARG DB_USER_NAME=
-ARG DB_PASS=
-ARG NOTIFICATION_FROM=
-ARG PROD_HOSTNAME=
+ARG DB_URL=jdbc:postgresql://localhost:5432/tablogdb
+ARG DB_USER_NAME=tablog
+ARG DB_PASS=FKLdfskwe9622
+ARG NOTIFICATION_FROM=testapp@talab.test.net
+ARG PROD_HOSTNAME=talab.test.net
 
 RUN sed -i "s|spring\.datasource\.url.*=.*|spring.datasource.url=$DB_URL|g" /opt/tablogapp/src/main/resources/application.properties && \
     sed -i "s|spring\.datasource\.username.*=.*|spring.datasource.username=$DB_USER_NAME|g" /opt/tablogapp/src/main/resources/application.properties && \
@@ -63,12 +63,17 @@ RUN mvn package -DskipTests
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+RUN ls /
+
 #Copy the springboot_nginx.conf file and replace the default NGINX configuration
 COPY springboot_nginx.conf /etc/nginx/sites-available/springboot_nginx.conf
 RUN ln -s /etc/nginx/sites-available/springboot_nginx.conf /etc/nginx/sites-enabled/
 RUN rm /etc/nginx/sites-enabled/default
 
-# Expose the necessary ports
+
+RUN dos2unix /entrypoint.sh && dos2unix /etc/nginx/sites-available/springboot_nginx.conf &&  apt-get --purge remove -y dos2unix && rm -rf /var/lib/apt/lists/*
+
+# EXPOSE 80 the necessary ports
 EXPOSE 80
 
 # Run the entrypoint script when the container starts

@@ -1,5 +1,5 @@
 #PORT
-LISTEN_PORT=80
+LISTEN_PORT=8090
 
 #var for entrypoint.sh
 DB_NAME=tablogdb

@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
-DB_NAME=
-DB_USER=
-DB_USER_PASS=
+DB_NAME=tablogdb
+DB_USER=tablog
+DB_USER_PASS=FKLdfskwe9622
 
 
 # Start PostgreSQL
