@@ -18,7 +18,7 @@
                             <form action="/resetpass" method="post">
                                 <div class="mb-3">
                                     <label for="username" class="form-label">User Name</label>
-                                    <input type="text" class="form-control ${(usernameError??)?string('is-invalid', '')}" id="username" name="username"  value="<#if user??>${user.username}</#if>" aria-describedby="usernameHelp" required>
+                                    <input type="text" class="form-control ${(usernameError??)?string('is-invalid', '')}" id="username" name="username"  value="<#if user??>${user.username}</#if>" aria-describedby="usernameHelp" required />
                                     <div id="usernameHelp" class="form-text">A new password will be sent to your mailbox</div>
                                     <#if usernameError??>
                                         <div class="invalid-feedback">

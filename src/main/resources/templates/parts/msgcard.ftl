@@ -1,6 +1,6 @@
-    <div class="card-columns mb=5">
+    <div class="card-columns mb=5"  id="message-list">
         <#list messages as message>
-            <div class="card my-3">
+            <div class="card my-3" msg-id="${message.messageId}">
                 <#if message.filename??>
                     <img src="/img/${message.filename}" class="card-img-top">
                 </#if>

@@ -42,6 +42,8 @@ public class Message {
         this.tag = tag;
     }
 
+
+
     public String getAuthorName() {
         return author != null ? author.getUsername() : "<none>";
     }

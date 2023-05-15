@@ -5,7 +5,7 @@
         <form method="get" action="/main" >
             <div class="row">
                 <div class="col-md-11">
-                    <input type="text" name="filter" class="form-control" value="${filter!}" placeholder="Search by tag">
+                    <input type="text" name="filter" class="form-control" value="${filter!}" placeholder="Search by tag" />
                 </div>
                 <div class="col-md-1">
                    <button type="submit" class="btn btn-primary ms-2">Search</button>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="mt-2">
                     <input type="text" class="form-control"
-                           value="<#if message??>${message.tag}</#if>" name="tag" placeholder="Tag">
+                           value="<#if message??>${message.tag}</#if>" name="tag" placeholder="Tag" />
                     <#if tagError??>
                         <div class="invalid-feedback">
                             ${tagError}
@@ -41,7 +41,7 @@
                 </div>
                 <div class="mt-2">
                     <div class="input-group">
-                        <input type="file"  name="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <input type="file"  name="file" class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
                     </div>
                 </div>
 

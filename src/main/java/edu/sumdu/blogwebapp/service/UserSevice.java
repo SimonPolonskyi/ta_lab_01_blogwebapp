@@ -6,12 +6,10 @@ import edu.sumdu.blogwebapp.entity.User;
 import edu.sumdu.blogwebapp.enums.ChangedParameters;
 import edu.sumdu.blogwebapp.enums.MailType;
 import edu.sumdu.blogwebapp.enums.Role;
-import edu.sumdu.blogwebapp.repository.PendingUserChangesRepository;
 import edu.sumdu.blogwebapp.repository.UserRepository;
 import edu.sumdu.blogwebapp.utils.RandomPasswordGenerator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -37,11 +35,6 @@ public class UserSevice implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
-
-
-    //@Autowired
-    //private PendingUserChangesRepository pendingUserChangesRepository;
 
     @Autowired
     private  PendingUserChangesService pendingUserChangesService;
@@ -214,8 +207,7 @@ public class UserSevice implements UserDetailsService {
     public void updateProfile(User user, String password, String email, String firstName, String lastName) {
         String userEmail = user.getEmail();
 
-        boolean isEmailChanged = (email != null && !email.equals(userEmail)) ||
-                (userEmail != null && !userEmail.equals(email)||(userEmail == null && email !=null));
+        boolean isEmailChanged = (email != null && !email.equals(userEmail)) || (userEmail != null && !userEmail.equals(email)||(userEmail == null && email !=null));
 
         if (isEmailChanged) {
 
@@ -237,13 +229,11 @@ public class UserSevice implements UserDetailsService {
             user.setPassword(passwordEncoder.encode(password));
         }
 
-        if ((firstName != null && !firstName.equals(user.getFirstName())) ||
-                (user.getFirstName() != null && !user.getFirstName().equals(firstName))) {
+        if ((firstName != null && !firstName.equals(user.getFirstName())) || (user.getFirstName() != null && !user.getFirstName().equals(firstName))) {
             user.setFirstName(firstName);
         }
 
-        if ((lastName != null && !lastName.equals(user.getLastName())) ||
-                (user.getLastName() != null && !user.getLastName().equals(lastName))) {
+        if ((lastName != null && !lastName.equals(user.getLastName())) || (user.getLastName() != null && !user.getLastName().equals(lastName))) {
             user.setLastName(lastName);
         }
          save(user);

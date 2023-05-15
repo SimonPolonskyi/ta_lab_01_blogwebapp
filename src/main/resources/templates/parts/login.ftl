@@ -15,7 +15,7 @@
                         <form action="${path}" method="post">
                             <div class="mb-3">
                                 <label for="username" class="form-label">User Name</label>
-                                <input type="text" class="form-control ${(usernameError??)?string('is-invalid', '')}" id="username" name="username"  value="<#if user??>${user.username}</#if>" required>
+                                <input type="text" class="form-control ${(usernameError??)?string('is-invalid', '')}" id="username" name="username"  value="<#if user??>${user.username}</#if>" required />
                                 <#if usernameError??>
                                     <div class="invalid-feedback">
                                         ${usernameError}
