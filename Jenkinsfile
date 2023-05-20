@@ -20,7 +20,7 @@ pipeline {
                 script {
                     sh 'docker network create wappnetwork'
                     sh 'docker run -d --network=wappnetwork --name wapp_postgres -e POSTGRES_DB=test_webap_db -e POSTGRES_USER=wapp_test -e POSTGRES_PASSWORD=wapp_test_pass -p 5432:5432 postgres:latest'
-                    sh "until docker exec postgres pg_isready -U wapp_test -d test_webap_db; do echo waiting for postgres; sleep 3; done;"
+                    sh "until docker exec wapp_postgres pg_isready -U wapp_test -d test_webap_db; do echo waiting for postgres; sleep 3; done;"
 					sleep 20
                 }
             }
