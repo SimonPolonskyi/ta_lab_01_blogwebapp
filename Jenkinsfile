@@ -18,8 +18,8 @@ pipeline {
         stage('Start Postgres') {
             steps {
                 script {
-                    sh 'docker network create wappnetwork'
-                    sh 'docker run -d --network=wappnetwork --name wapp_postgres -e POSTGRES_DB=test_webap_db -e POSTGRES_USER=wapp_test -e POSTGRES_PASSWORD=wapp_test_pass -p 5432:5432 postgres:latest'
+                    sh 'docker network inspect wapp_network_tst --format {{.Id}} 2>/dev/null || docker network create --driver bridge wapp_network_tst'
+                    sh 'docker run -d --network=wapp_network_tst --name wapp_postgres -e POSTGRES_DB=test_webap_db -e POSTGRES_USER=wapp_test -e POSTGRES_PASSWORD=wapp_test_pass -p 5432:5432 postgres:latest'
                     sh "until docker exec wapp_postgres pg_isready -U wapp_test -d test_webap_db; do echo waiting for postgres; sleep 3; done;"
 					sleep 20
                 }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
 				        sh "docker build . -t wapp_test_img"
-                        sh 'docker run -d --network=wappnetwork --name wapp_test_c -v ${WORKSPACE}:/usr/src/app wapp_test_img'
+                        sh 'docker run -d --network=wapp_network_tst --name wapp_test_c -v ${WORKSPACE}:/usr/src/app wapp_test_img'
 						sleep 10
                 }
             }
@@ -44,7 +44,7 @@ pipeline {
                 sh 'docker rm wapp_postgres'
                 sh 'docker stop myapp_tst'
                 sh 'docker rm myapp_tst'
-                sh 'docker network rm wappnetwork'
+                sh 'docker network rm wapp_network_tst'
 				junit '**/target/surefire-reports/*.xml'
             }
         }
