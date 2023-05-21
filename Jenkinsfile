@@ -19,9 +19,9 @@ pipeline {
             steps {
                 script {
                     sh 'docker network inspect wapp_network_tst --format {{.Id}} 2>/dev/null || docker network create --driver bridge wapp_network_tst'
-                    sh 'docker ps -q --filter "name=wapp_test_c" | grep -q . && docker stop wapp_test_c && docker rm -fv wapp_test_c'
-                    sh 'docker ps -q --filter "name=wapp_postgres" | grep -q . && docker stop wapp_postgres && docker rm -fv wapp_postgres'
-					sleep 20
+                    sh 'if docker ps -qa --filter "name=wapp_test_c" | grep -q .; then docker stop wapp_test_c && docker rm -fv wapp_test_c; fi'
+                    sh 'if docker ps -qa --filter "name=wapp_postgres" | grep -q .; then docker stop wapp_postgres && docker rm -fv wapp_postgres; fi'
+					sleep 5
                 }
             }
         }
@@ -40,7 +40,7 @@ pipeline {
             steps {
                 script {
 				        sh "docker build . -t wapp_test_img"
-                        sh 'docker run -d --network=wapp_network_tst --name wapp_test_c -v ${WORKSPACE}:/usr/src/app wapp_test_img'
+                        sh 'docker run -i --network=wapp_network_tst --name wapp_test_c -v ${WORKSPACE}:/usr/src/app wapp_test_img'
 						sleep 10
                 }
             }
@@ -51,9 +51,9 @@ pipeline {
         always {
             script {
                 sh 'docker stop wapp_postgres'
-                sh 'docker rm wapp_postgres'
+              //  sh 'docker rm wapp_postgres'
                 sh 'docker stop wapp_test_c'
-                sh 'docker rm wapp_test_c'
+              //  sh 'docker rm wapp_test_c'
                 sh 'docker network rm wapp_network_tst'
 				junit '**/target/surefire-reports/*.xml'
             }

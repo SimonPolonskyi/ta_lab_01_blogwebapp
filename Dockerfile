@@ -16,6 +16,6 @@ RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.1/binaries/apache-maven-3.9.
 
 # Add maven in the PATH environment variable
 ENV PATH=$PATH:/usr/share/maven/bin
-
+WORKDIR /usr/src/app/
 
 ENTRYPOINT ["mvn","--f","/usr/src/app/pom.xml", "clean", "test"]
