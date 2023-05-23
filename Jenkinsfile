@@ -57,7 +57,8 @@ pipeline {
                 sh 'docker network rm wapp_network_tst'
 				junit '**/target/surefire-reports/*.xml'
 				recordIssues tools: [checkStyle(pattern: '**/target/checkstyle-result.xml'),
-                                     spotBugs(pattern: '**/target/spotbugsXml.xml']
+                                     spotBugs(pattern: '**/target/spotbugsXml.xml')]
+
             }
         }
     }
