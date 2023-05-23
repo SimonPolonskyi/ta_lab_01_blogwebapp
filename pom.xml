@@ -204,7 +204,7 @@
 				<executions>
 					<execution>
 						<id>spotbugs</id>
-						<phase>validate</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>spotbugs</goal>
 						</goals>
