@@ -143,6 +143,25 @@
 			</exclusions>
 		</dependency>
 
+		<!-- selenium -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>4.9.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>5.3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.2.1</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 
@@ -164,12 +183,30 @@
 						<id>validate</id>
 						<phase>validate</phase>
 						<configuration>
-
 							<encoding>UTF-8</encoding>
 							<consoleOutput>true</consoleOutput>
 						</configuration>
 						<goals>
 							<goal>checkstyle</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>4.7.3.4</version>
+				<configuration>
+					<effort>Max</effort>
+					<threshold>Low</threshold>
+				</configuration>
+				<executions>
+					<execution>
+						<id>spotbugs</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>spotbugs</goal>
 						</goals>
 					</execution>
 				</executions>
