@@ -2,7 +2,7 @@ package edu.sumdu.blogwebapp.controller;
 
 import edu.sumdu.blogwebapp.entity.User;
 import edu.sumdu.blogwebapp.enums.Role;
-import edu.sumdu.blogwebapp.service.UserSevice;
+import edu.sumdu.blogwebapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,7 +20,7 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
     @Autowired
-    private UserSevice userService;
+    private UserService userService;
 
 
 

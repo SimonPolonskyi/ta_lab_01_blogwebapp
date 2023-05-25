@@ -9,35 +9,29 @@ import edu.sumdu.blogwebapp.repository.UserRepository;
 import edu.sumdu.blogwebapp.utils.RandomPasswordGenerator;
 import edu.sumdu.blogwebapp.utils.ServerInfo;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
-class UserSeviceTest {
+class UserServiceTest {
 
     @Spy
     @InjectMocks
-    private UserSevice userSevice;
+    private UserService userService;
 
     @MockBean
     private UserRepository userRepository;
@@ -64,14 +58,14 @@ class UserSeviceTest {
 
 
     @Test
-    void loadUserByUsername() {
+    public void loadUserByUsername() {
         String testUsername = "testUser";
         User expectedUser = new User();
         expectedUser.setUsername(testUsername);
 
         when(userRepository.findByUsername(anyString())).thenReturn(expectedUser);
 
-        UserDetails actualUser = userSevice.loadUserByUsername(testUsername);
+        UserDetails actualUser = userService.loadUserByUsername(testUsername);
 
         verify(userRepository, times(1)).findByUsername(testUsername);
         assertNotNull(actualUser);
@@ -85,7 +79,7 @@ class UserSeviceTest {
         when(userRepository.findByUsername(anyString())).thenReturn(null);
 
         Exception exception = assertThrows(UsernameNotFoundException.class, () -> {
-            userSevice.loadUserByUsername(testUsername);
+            userService.loadUserByUsername(testUsername);
         });
 
         String expectedMessage = "User not found";
@@ -103,7 +97,7 @@ class UserSeviceTest {
 
         when(userRepository.findByUsername(anyString())).thenReturn(expectedUser);
 
-        User actualUser = userSevice.findByUsername(testUsername);
+        User actualUser = userService.findByUsername(testUsername);
 
         verify(userRepository, times(1)).findByUsername(testUsername);
         assertNotNull(actualUser);
@@ -117,11 +111,11 @@ class UserSeviceTest {
 
         user.setEmail("test@test.com");
 
-        boolean isUserCreated = userSevice.addUser(user);
+        boolean isUserCreated = userService.addUser(user);
 
-        Assert.assertTrue(isUserCreated);
-        Assert.assertNotNull(user.getActivationCode());
-        Assert.assertTrue(CoreMatchers.is(user.getRoles()).matches(Collections.singleton(Role.USER)));
+        assertTrue(isUserCreated);
+        assertNotNull(user.getActivationCode());
+        assertTrue(CoreMatchers.is(user.getRoles()).matches(Collections.singleton(Role.USER)));
 
         verify(userRepository, times(1)).save(user);
         verify(mailSender, times(1))
@@ -142,9 +136,9 @@ class UserSeviceTest {
                 .when(userRepository)
                 .findByUsername("John");
 
-        boolean isUserCreated = userSevice.addUser(user);
+        boolean isUserCreated = userService.addUser(user);
 
-        Assert.assertFalse(isUserCreated);
+        assertFalse(isUserCreated);
 
         verify(userRepository, times(0)).save(ArgumentMatchers.any(User.class));
         verify(mailSender, times(0))
@@ -163,7 +157,7 @@ class UserSeviceTest {
 
         when(serverInfo.getHost()).thenReturn("localhost");
 
-        userSevice.sendMessage(testUser, MailType.ACTIVATE);
+        userService.sendMessage(testUser, MailType.ACTIVATE);
 
         verify(mailSender, times(1)).send(
                 eq(testUser.getEmail()),
@@ -190,7 +184,7 @@ class UserSeviceTest {
         when(randomPasswordGenerator.generateCommonLangPassword()).thenReturn(newPassword);
         when(pendingUserChangesService.findPendingUserChange(testUser.getId(), ChangedParameters.PASSWORD)).thenReturn(Optional.of(pendingUserChanges));
 
-        userSevice.sendMessage(testUser, MailType.RESET);
+        userService.sendMessage(testUser, MailType.RESET);
 
         verify(mailSender, times(1)).send(
                 eq(testUser.getEmail()),
@@ -213,7 +207,7 @@ class UserSeviceTest {
         when(randomPasswordGenerator.generateCommonLangPassword()).thenReturn(newPassword);
         when(pendingUserChangesService.findPendingUserChange(testUser.getId(), ChangedParameters.PASSWORD)).thenReturn(Optional.empty());
 
-        userSevice.sendMessage(testUser, MailType.RESET);
+        userService.sendMessage(testUser, MailType.RESET);
 
         verify(mailSender, times(1)).send(
                 eq(testUser.getEmail()),
@@ -240,7 +234,7 @@ class UserSeviceTest {
 
         when(pendingUserChangesService.findPendingUserChange(testUser.getId(), ChangedParameters.MAIL)).thenReturn(Optional.of(pendingUserChanges));
 
-        userSevice.sendMessage(testUser, MailType.CHANGE_MAIL);
+        userService.sendMessage(testUser, MailType.CHANGE_MAIL);
 
         verify(mailSender, times(1)).send(
                 eq(testUser.getEmail()),
@@ -261,7 +255,7 @@ class UserSeviceTest {
         when(serverInfo.getHost()).thenReturn("localhost");
         when(pendingUserChangesService.findPendingUserChange(testUser.getId(), ChangedParameters.MAIL)).thenReturn(Optional.empty());
 
-        userSevice.sendMessage(testUser, MailType.CHANGE_MAIL);
+        userService.sendMessage(testUser, MailType.CHANGE_MAIL);
 
         verify(mailSender, times(1)).send(
                 eq(testUser.getEmail()),
@@ -279,9 +273,9 @@ class UserSeviceTest {
 
         when(userRepository.findByActivationCode(anyString())).thenReturn(testUser);
 
-        boolean result = userSevice.activateUser(activationCode);
+        boolean result = userService.activateUser(activationCode);
 
-        verify(userSevice, times(1)).save(testUser);
+        verify(userService, times(1)).save(testUser);
         assertTrue(result);
         assertNull(testUser.getActivationCode());
     }
@@ -292,9 +286,9 @@ class UserSeviceTest {
 
         when(userRepository.findByActivationCode(anyString())).thenReturn(null);
 
-        boolean result = userSevice.activateUser(activationCode);
+        boolean result = userService.activateUser(activationCode);
 
-        verify(userSevice, times(0)).save(any(User.class));
+        verify(userService, times(0)).save(any(User.class));
         assertFalse(result);
     }
 
@@ -306,7 +300,7 @@ class UserSeviceTest {
 
         when(userRepository.findAll()).thenReturn(expectedUsers);
 
-        List<User> actualUsers = userSevice.findAll();
+        List<User> actualUsers = userService.findAll();
 
         assertEquals(expectedUsers, actualUsers);
     }
@@ -321,11 +315,11 @@ class UserSeviceTest {
         Map<String, String> form = new HashMap<>();
         form.put("ADMIN", "");
 
-        userSevice.saveUser(testUser, newUsername, form);
+        userService.saveUser(testUser, newUsername, form);
 
         assertEquals(newUsername, testUser.getUsername());
         assertTrue(testUser.getRoles().contains(Role.ADMIN));
-        verify(userSevice, times(1)).save(testUser);
+        verify(userService, times(1)).save(testUser);
     }
 
     @Test
@@ -344,11 +338,11 @@ class UserSeviceTest {
 
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        userSevice.updateProfile(testUser, newPassword, newEmail, newFirstName, newLastName);
+        userService.updateProfile(testUser, newPassword, newEmail, newFirstName, newLastName);
 
         verify(pendingUserChangesService, times(2)).findPendingUserChange(anyLong(), any());
-        verify(userSevice, times(1)).save(any(User.class));
-        verify(userSevice, times(1)).sendMessage(any(User.class), any());
+        verify(userService, times(1)).save(any(User.class));
+        verify(userService, times(1)).sendMessage(any(User.class), any());
 
         assertEquals("encodedPassword", testUser.getPassword());
         assertEquals(newFirstName, testUser.getFirstName());
@@ -377,11 +371,11 @@ class UserSeviceTest {
 
         when(pendingUserChangesService.findPendingUserChange(testUser.getId(), ChangedParameters.MAIL)).thenReturn(Optional.of(pendingUserChanges));
 
-        userSevice.updateProfile(testUser, newPassword, newEmail, newFirstName, newLastName);
+        userService.updateProfile(testUser, newPassword, newEmail, newFirstName, newLastName);
 
         verify(pendingUserChangesService, times(2)).findPendingUserChange(anyLong(), any());
-        verify(userSevice, times(1)).save(any(User.class));
-        verify(userSevice, times(1)).sendMessage(any(User.class), any());
+        verify(userService, times(1)).save(any(User.class));
+        verify(userService, times(1)).sendMessage(any(User.class), any());
 
 
         assertEquals(newFirstName, testUser.getFirstName());
@@ -397,7 +391,7 @@ class UserSeviceTest {
 
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        userSevice.resetPassword(testUser, newPassword);
+        userService.resetPassword(testUser, newPassword);
 
         verify(pendingUserChangesService, times(1)).findPendingUserChange(anyLong(), any());
         verify(pendingUserChangesService, times(1)).save(any(PendingUserChanges.class));
@@ -411,7 +405,7 @@ class UserSeviceTest {
 
         when(userRepository.save(any(User.class))).thenReturn(testUser);
 
-        User savedUser = userSevice.save(testUser);
+        User savedUser = userService.save(testUser);
 
         verify(userRepository, times(1)).save(testUser);
         assertNotNull(savedUser);

@@ -25,7 +25,7 @@ import edu.sumdu.blogwebapp.utils.ServerInfo;
 
 
 @Service
-public class UserSevice implements UserDetailsService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
@@ -84,7 +84,7 @@ public class UserSevice implements UserDetailsService {
 
         switch(mailType) {
             case ACTIVATE:
-                if (!StringUtils.isEmpty(user.getEmail())) {
+                if (StringUtils.hasLength(user.getEmail())) {
                     String message = String.format(
                             "Hello, %s! \n" +
                                     "Welcome to TA Lab Blog. For activate you account, navigate to the following link: http://%s/activate/%s",
@@ -97,7 +97,7 @@ public class UserSevice implements UserDetailsService {
                 }
                 break;
             case RESET:
-                if (!StringUtils.isEmpty(user.getEmail())) {
+                if (StringUtils.hasLength(user.getEmail())) {
 
                     RandomPasswordGenerator randomPasswordGenerator = new RandomPasswordGenerator();
                     String newPassword = randomPasswordGenerator.generateCommonLangPassword();
@@ -133,7 +133,7 @@ public class UserSevice implements UserDetailsService {
                 break;
 
             case CHANGE_MAIL:
-                if (!StringUtils.isEmpty(user.getEmail())) {
+                if (StringUtils.hasLength(user.getEmail())) {
 
                     String message = "";
                     Optional<PendingUserChanges> pendingUserChange = pendingUserChangesService.findPendingUserChange(user.getId(), ChangedParameters.MAIL);

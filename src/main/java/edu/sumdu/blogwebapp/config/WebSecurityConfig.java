@@ -1,6 +1,6 @@
 package edu.sumdu.blogwebapp.config;
 
-import edu.sumdu.blogwebapp.service.UserSevice;
+import edu.sumdu.blogwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 
     @Autowired
-    private UserSevice userSevice;
+    private UserService userService;
 
     AuthenticationManager authenticationManager;
 
@@ -27,7 +27,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userSevice);
+        authenticationManagerBuilder.userDetailsService(userService);
         authenticationManager = authenticationManagerBuilder.build();
 
         http

@@ -1,7 +1,7 @@
 package edu.sumdu.blogwebapp.controller;
 
 import edu.sumdu.blogwebapp.entity.User;
-import edu.sumdu.blogwebapp.service.UserSevice;
+import edu.sumdu.blogwebapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,7 @@ import java.util.Map;
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserSevice userSevice;
+    private UserService userService;
 
     @GetMapping("/registration")
     public String registration() {
@@ -51,7 +51,7 @@ public class RegistrationController {
             return "registration";
         }
 
-        if (!userSevice.addUser(user)) {
+        if (!userService.addUser(user)) {
             model.addAttribute("usernameError", "User exists!");
             return "registration";
         }
@@ -61,7 +61,7 @@ public class RegistrationController {
 
     @GetMapping("/activate/{code}")
     public String activate(Model model, @PathVariable String code) {
-        boolean isActivated = userSevice.activateUser(code);
+        boolean isActivated = userService.activateUser(code);
 
         if (isActivated) {
             model.addAttribute("messageType", "success");
