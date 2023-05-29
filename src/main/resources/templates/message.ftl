@@ -30,17 +30,19 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h3 class="mt-5">Comments:</h3>
-                <#list comments as comment>
-                    <div class="card mt-3">
-                        <div  class="card-header">
-                             Comment from ${comment.author.getUsername()}
+                <#if comments??>
+                    <h3 class="mt-5">Comments:</h3>
+                    <#list comments as comment>
+                        <div class="card mt-3">
+                            <div  class="card-header">
+                                 Comment from ${comment.author.getUsername()}
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">${comment.text}</p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">${comment.text}</p>
-                        </div>
-                    </div>
-                </#list>
+                    </#list>
+                </#if>
             </div>
         </div>
     </div>

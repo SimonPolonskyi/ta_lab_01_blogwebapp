@@ -1,0 +1,107 @@
+---
+env:
+  contexts:
+    - name: "http://wapptestc:8080"
+      urls:
+        - "http://wapptestc:8080"
+      includePaths:
+        - "http://wapptestc:8080.*"
+      excludePaths:
+        - "^https?://.*\\.(?:com|org|net).*$"
+        - "^http?://.*\\.(?:com|org|net).*$"
+      authentication:
+        method: "form"
+        parameters:
+          loginPageUrl: "http://wapptestc:8080/login"
+          loginRequestUrl: "http://wapptestc:8080/login"
+          loginRequestBody: "username={%username%}&password={%password%}&_csrf=om-i8SlcpjmPQb-BYXaHBjwTQxXyZPx1Xqh_6BLlKd3Te93YxFmSlBltxAmiJN2xAFuzY1p3bnSRXcRYOJAeinGBHum1T-_p"
+        verification:
+          method: "response"
+          loggedInRegex: ".*<a class=\"nav-link\" href=\"/user/profile\">.*</a>.*"
+          pollFrequency: 60
+          pollUnits: "requests"
+          pollUrl: ""
+          pollPostData: ""
+      sessionManagement:
+        method: "cookie"
+        parameters: {}
+      technology:
+        exclude:
+          - "C"
+          - "ASP"
+          - "Apache"
+          - "IBM DB2"
+          - "SQLite"
+          - "PHP"
+          - "CouchDB"
+          - "Microsoft SQL Server"
+          - "Oracle"
+          - "Firebird"
+          - "MongoDB"
+          - "HypersonicSQL"
+          - "MySQL"
+          - "SAP MaxDB"
+          - "SVN"
+          - "Ruby"
+          - "IIS"
+          - "Microsoft Access"
+          - "Sybase"
+          - "Python"
+      users:
+        - name: "user 1"
+          credentials:
+            password: "ZAP"
+            username: "user 1"
+  parameters:
+    failOnError: true
+    failOnWarning: false
+    progressToStdout: true
+  vars: {}
+jobs:
+  - parameters:
+      context: "http://wapptestc:8080"
+      user: "user 1"
+      url: ""
+      maxDuration: 0
+      maxDepth: 0
+      maxChildren: 0
+    name: "spider"
+    type: "spider"
+  - parameters:
+      template: "risk-confidence-html"
+      theme: "original"
+      reportDir: "/zap/wrk/report/"
+      reportFile: ""
+      reportTitle: "ZAP Scanning Report"
+      reportDescription: ""
+      displayReport: false
+    risks:
+      - "info"
+      - "low"
+      - "medium"
+      - "high"
+    confidences:
+      - "falsepositive"
+      - "low"
+      - "medium"
+      - "high"
+      - "confirmed"
+    sections:
+      - "siteRiskCounts"
+      - "responseBody"
+      - "appendix"
+      - "alertTypes"
+      - "responseHeader"
+      - "alertTypeCounts"
+      - "riskConfidenceCounts"
+      - "alerts"
+      - "aboutThisReport"
+      - "contents"
+      - "requestBody"
+      - "reportDescription"
+      - "reportParameters"
+      - "requestHeader"
+      - "summaries"
+    name: "report"
+    type: "report"
+

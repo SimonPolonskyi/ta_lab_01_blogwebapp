@@ -10,6 +10,7 @@ import edu.sumdu.blogwebapp.service.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,6 +53,7 @@ public class MessageController {
         model.addAttribute("message", message);
         return "message";
     }
+
 
     @PostMapping("/message/{code}")
     public String add(

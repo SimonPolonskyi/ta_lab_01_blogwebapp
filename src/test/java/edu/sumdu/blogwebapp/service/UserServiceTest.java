@@ -28,7 +28,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
 class UserServiceTest {
-
     @Spy
     @InjectMocks
     private UserService userService;
@@ -44,7 +43,7 @@ class UserServiceTest {
 
     @MockBean
     ServerInfo serverInfo;
-    
+
     @MockBean
     PendingUserChangesService pendingUserChangesService;
 
@@ -55,7 +54,6 @@ class UserServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
 
     @Test
     public void loadUserByUsername() {

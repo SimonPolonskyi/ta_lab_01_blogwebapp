@@ -4,6 +4,7 @@ import edu.sumdu.blogwebapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -32,7 +33,8 @@ public class WebSecurityConfig {
 
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/registration", "/static/**", "/activate/*", "/img/**", "/message/*", "/changeconfirm/*","/resetpass").permitAll()
+                        .requestMatchers("/", "/registration", "/static/**", "/activate/*", "/img/**", "/changeconfirm/*","/resetpass").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/message/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationManager(authenticationManager)
