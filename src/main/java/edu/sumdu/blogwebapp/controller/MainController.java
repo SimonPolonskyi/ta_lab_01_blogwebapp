@@ -2,7 +2,7 @@ package edu.sumdu.blogwebapp.controller;
 
 import edu.sumdu.blogwebapp.entity.Message;
 import edu.sumdu.blogwebapp.entity.User;
-import edu.sumdu.blogwebapp.repository.MessageRepository;
+import edu.sumdu.blogwebapp.service.StringValidationService;
 import edu.sumdu.blogwebapp.service.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +31,13 @@ public class MainController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    private final StringValidationService stringValidationService;
+
+
+    @Autowired
+    public MainController(StringValidationService stringValidationService) {
+        this.stringValidationService = stringValidationService;
+    }
 
     @GetMapping("/")
     public String greeting(Model model) {
@@ -42,6 +49,8 @@ public class MainController {
     @GetMapping("/main")
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Message> messages = messageService.getAllMessagesWithCommentCount();
+
+        filter = stringValidationService.escapeHtml(filter);
 
         if (filter != null && !filter.isEmpty()) {
             messages = messageService.findByTag(filter);
@@ -64,6 +73,10 @@ public class MainController {
             @RequestParam("file") MultipartFile file
     ) throws IOException {
         message.setAuthor(user);
+
+        message.setText(stringValidationService.escapeHtml(message.getText()));
+        message.setTag(stringValidationService.escapeHtml(message.getTag()));
+
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);

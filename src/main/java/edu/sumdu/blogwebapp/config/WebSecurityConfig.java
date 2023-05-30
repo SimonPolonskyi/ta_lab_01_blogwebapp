@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +33,7 @@ public class WebSecurityConfig {
         authenticationManager = authenticationManagerBuilder.build();
 
         http
+
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/registration", "/static/**", "/activate/*", "/img/**", "/changeconfirm/*","/resetpass").permitAll()
                         .requestMatchers(HttpMethod.GET, "/message/*").permitAll()
@@ -42,7 +44,20 @@ public class WebSecurityConfig {
                         .loginPage("/login")
                         .permitAll()
                 )
-                .logout((logout) -> logout.permitAll());
+                .logout((logout) -> logout.permitAll())
+                .headers(headers -> headers
+                        .cacheControl(cache -> cache.disable())
+                )
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net;  img-src  'self'; connect-src  'self'; frame-src  'self'; frame-ancestors  'self'; font-src  'self'; media-src  'self';  object-src  'self'; manifest-src  'self'; form-action  'self' ")
+                        )
+                )
+                /*.headers(headers -> headers
+                        .xssProtection(xss -> xss
+                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                        )
+                )*/;
 
         return http.build();
     }

@@ -55,7 +55,7 @@
                     <h3 class="mt-5">Add a Comment</h3>
                     <form  method="post" action="/message/${message.getMessageId()}" >
                         <div class="mb-3">
-                            <textarea  name="text"  style="height: 150px"  class="form-control  ${(textError??)?string('is-invalid', '')}" id="commentText" rows="3" value="<#if comment??>${comment.text}</#if>"></textarea>
+                            <textarea  name="text"   class="form-control  ${(textError??)?string('is-invalid', '')}" id="commentText" rows="3" value="<#if comment??>${comment.text}</#if>"></textarea>
                             <#if textError??>
                                 <div class="invalid-feedback">
                                     ${textError}

@@ -2,6 +2,7 @@ package edu.sumdu.blogwebapp.controller;
 
 import edu.sumdu.blogwebapp.entity.User;
 import edu.sumdu.blogwebapp.enums.Role;
+import edu.sumdu.blogwebapp.service.StringValidationService;
 import edu.sumdu.blogwebapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    private final StringValidationService stringValidationService;
+
+
+    @Autowired
+    public UserController(StringValidationService stringValidationService) {
+        this.stringValidationService = stringValidationService;
+    }
 
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -73,7 +82,10 @@ public class UserController {
     ) {
         User currentUser = userService.findByUsername(currentUserDetails.getUsername());
 
+        updatedUser.setFirstName(stringValidationService.escapeHtml(updatedUser.getFirstName()));
+        updatedUser.setLastName(stringValidationService.escapeHtml(updatedUser.getLastName()));
         boolean paramsHasEror = false;
+
 
         if (password!= null && password2== null ) {
 
@@ -87,8 +99,9 @@ public class UserController {
             paramsHasEror=true;
         }
 
-        if (email== null) {
+        if (email== null || !stringValidationService.isValidEmailAddress(email)) {
             model.addAttribute("emailError", "Email cannot be empty");
+            email ="";
             paramsHasEror=true;
         }
 
@@ -96,7 +109,7 @@ public class UserController {
             return "profile";
         }
 
-        userService.updateProfile(currentUser, password, email, firstName, lastName);
+        userService.updateProfile(currentUser, password, email, stringValidationService.escapeHtml(firstName), stringValidationService.escapeHtml(lastName));
 
         return "profile";
     }

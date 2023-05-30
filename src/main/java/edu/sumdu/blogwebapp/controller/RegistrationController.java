@@ -1,6 +1,7 @@
 package edu.sumdu.blogwebapp.controller;
 
 import edu.sumdu.blogwebapp.entity.User;
+import edu.sumdu.blogwebapp.service.StringValidationService;
 import edu.sumdu.blogwebapp.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,14 @@ public class RegistrationController {
     @Autowired
     private UserService userService;
 
+    private final StringValidationService stringValidationService;
+
+
+    @Autowired
+    public RegistrationController(StringValidationService stringValidationService) {
+        this.stringValidationService = stringValidationService;
+    }
+
     @GetMapping("/registration")
     public String registration() {
         return "registration";
@@ -28,6 +37,11 @@ public class RegistrationController {
     public String addUser(@Valid User user, BindingResult bindingResult, Model model) {
 
         boolean paramsHasEror = false;
+
+        user.setUsername(stringValidationService.escapeHtml(user.getUsername()));
+        user.setFirstName(stringValidationService.escapeHtml(user.getFirstName()));
+        user.setLastName(stringValidationService.escapeHtml(user.getLastName()));
+
 
 
         if (user.getPassword2()== null ) {
@@ -41,6 +55,12 @@ public class RegistrationController {
             model.addAttribute("passwordError", "Passwords are different!");
             paramsHasEror=true;
            // return "registration";
+        }
+
+        if (!stringValidationService.isValidEmailAddress(user.getEmail())){
+            user.setEmail(stringValidationService.escapeHtml(user.getEmail()));
+            paramsHasEror=true;
+
         }
 
         if (paramsHasEror || bindingResult.hasErrors()) {

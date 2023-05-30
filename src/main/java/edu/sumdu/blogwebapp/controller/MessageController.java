@@ -3,14 +3,12 @@ package edu.sumdu.blogwebapp.controller;
 import edu.sumdu.blogwebapp.entity.Comment;
 import edu.sumdu.blogwebapp.entity.Message;
 import edu.sumdu.blogwebapp.entity.User;
-import edu.sumdu.blogwebapp.repository.CommentRepository;
-import edu.sumdu.blogwebapp.repository.MessageRepository;
 import edu.sumdu.blogwebapp.service.CommentService;
+import edu.sumdu.blogwebapp.service.StringValidationService;
 import edu.sumdu.blogwebapp.service.MessageService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,13 +32,19 @@ public class MessageController {
     @Autowired
     private CommentService commentService;
 
+
+
     @Value("${upload.path}")
     private String uploadPath;
-/*
-    public MessageController(MessageService messageService) {
-        this.messageService = messageService;
+
+    private final StringValidationService stringValidationService;
+
+
+    @Autowired
+    public MessageController(StringValidationService stringValidationService) {
+        this.stringValidationService = stringValidationService;
     }
-    */
+
 
     @GetMapping("/message/{code}")
     public String message(Model model, @PathVariable Long code) {
@@ -71,6 +75,7 @@ public class MessageController {
         comment.setAuthor(user);
         comment.setMessage(message);
         comment.setOrder_num(commentService.findMAxOrderNum(message.getMessageId())+1);
+        comment.setText(stringValidationService.escapeHtml(comment.getText()));
 
         if (bindingResult.hasErrors()) {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);

@@ -22,7 +22,7 @@
         <div class="mt-3">
             <form method="post" enctype="multipart/form-data">
                 <div class="mt-2">
-                    <textarea type="textarea" style="height: 150px" class="form-control ${(textError??)?string('is-invalid', '')}"
+                    <textarea type="textarea" class="form-control ${(textError??)?string('is-invalid', '')}"
                            value="<#if message??>${message.text}</#if>" name="text" placeholder="Type a message" ></textarea>
                     <#if textError??>
                         <div class="invalid-feedback">
